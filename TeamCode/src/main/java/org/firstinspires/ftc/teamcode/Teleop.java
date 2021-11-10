@@ -23,7 +23,7 @@ public class Teleop extends OpMode
     private DcMotor intakeDrive = null;
     private DcMotor carouselDrive = null;
     private DcMotor fourth = null;
-
+    private DcMotor fifth = null;
     @Override
     public void init() {
         telemetry.addData("Status", "Initialized");
@@ -38,7 +38,8 @@ public class Teleop extends OpMode
         linearSlideDrive = hardwareMap.get(DcMotor.class, "extra_motor_1");
         intakeDrive = hardwareMap.get(DcMotor.class, "extra_motor_2");
         carouselDrive = hardwareMap.get(DcMotor.class, "extra_motor_3");
-        fourth = hardwareMap.get(DcMotor.class, "extra_motor_3");
+        fourth = hardwareMap.get(DcMotor.class, "extra_motor_4");
+        fifth = hardwareMap.get(DcMotor.class, "extra_motor_5");
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
 
