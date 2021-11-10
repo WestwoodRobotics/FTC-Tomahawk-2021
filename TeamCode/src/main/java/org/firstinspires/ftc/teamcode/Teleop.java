@@ -52,6 +52,7 @@ public class Teleop extends OpMode
         intakeDrive.setDirection(Dcmotor.Direction.FORWARD);
         carouselDrive.setDirection(Dcmotor.Direction.FORWARD);
         fourth.setDirection(Dcmotor.Direction.FORWARD);
+        fifth.setDirection(Dcmotor.Direction.FORWARD);
 
         //setting zero power behavior to brake instead of float.
         //brake means that moving the wheel is met with active resistance
