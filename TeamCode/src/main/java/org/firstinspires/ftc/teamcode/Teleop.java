@@ -15,14 +15,15 @@ public class Teleop extends OpMode
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
 
-    private DcMotor FLDrive = null;
-    private DcMotor FRDrive = null;
-    private DcMotor BLDrive = null;
-    private DcMotor BRDrive = null;
+    private DcMotor flDrive = null;
+    private DcMotor frDrive = null;
+    private DcMotor blDrive = null;
+    private DcMotor brDrive = null;
+    private DcMotor linearSlideDrive = null;
+    private DcMotor intakeDrive = null;
+    private DcMotor carouselDrive = null;
+    private DcMotor fourth = null;
 
-    /*
-     * Code to run ONCE when the driver hits INIT
-     */
     @Override
     public void init() {
         telemetry.addData("Status", "Initialized");
@@ -30,27 +31,44 @@ public class Teleop extends OpMode
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
-        FLDrive = hardwareMap.get(DcMotor.class, "front_left_drive");
-        FRDrive = hardwareMap.get(DcMotor.class, "front_right_drive");
-        BLDrive = hardwareMap.get(DcMotor.class, "back_left_drive");
-        BRDrive = hardwareMap.get(DcMotor.class, "back_right_drive");
-
+        flDrive = hardwareMap.get(DcMotor.class, "front_left_drive");
+        frDrive = hardwareMap.get(DcMotor.class, "front_right_drive");
+        blDrive = hardwareMap.get(DcMotor.class, "back_left_drive");
+        brDrive = hardwareMap.get(DcMotor.class, "back_right_drive");
+        linearSlideDrive = hardwareMap.get(DcMotor.class, "extra_motor_1");
+        intakeDrive = hardwareMap.get(DcMotor.class, "extra_motor_2");
+        carouselDrive = hardwareMap.get(DcMotor.class, "extra_motor_3");
+        fourth = hardwareMap.get(DcMotor.class, "extra_motor_3");
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
 
-        //lol
-        FLDrive.setDirection(DcMotor.Direction.FORWARD);
-        FRDrive.setDirection(DcMotor.Direction.FORWARD);
-        BLDrive.setDirection(DcMotor.Direction.FORWARD);
-        BRDrive.setDirection(DcMotor.Direction.FORWARD);
+        //setting direction
+        flDrive.setDirection(DcMotor.Direction.FORWARD);
+        frDrive.setDirection(DcMotor.Direction.REVERSE);
+        blDrive.setDirection(DcMotor.Direction.FORWARD);
+        brDrive.setDirection(DcMotor.Direction.REVERSE);
+        linearSlideDrive.setDirection(Dcmotor.Direction.FOWARD);
+        intakeDrive.setDirection(Dcmotor.Direction.FORWARD);
+        carouselDrive.setDirection(Dcmotor.Direction.FORWARD);
+        fourth.setDirection(Dcmotor.Direction.FORWARD);
+
+        //setting zero power behavior to brake instead of float.
+        //brake means that moving the wheel is met with active resistance
+        flDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        blDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        linearSlideDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        intakeDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        carouselDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        fourth.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        //float means the wheel will be able to be pushed
 
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
     }
 
-    /*
-     * Code to run REPEATEDLY after the driver hits INIT, but before they hit PLAY
-     */
+
     @Override
     public void init_loop() {
     }
@@ -68,59 +86,62 @@ public class Teleop extends OpMode
      */
     @Override
     public void loop() {
-        // Setup a variable for each drive wheel to save power level for telemetry
-        double FLPower;
-        double FRPower;
-        double BLPower;
-        double BRPower;
+        double flPower;
+        double frPower;
+        double blPower;
+        double brPower;
+        double linearSlidePower;
+        double intakePower;
+        double carouselPower;
+        double fourthPower;
 
-        //Power adjusting
-        FLPower = -gamepad1.left_stick_y + gamepad1.left_stick_x + gamepad1.right_stick_x;
-        FRPower = -gamepad1.left_stick_y - gamepad1.left_stick_x - gamepad1.right_stick_x;
-        BLPower = -gamepad1.left_stick_y - gamepad1.left_stick_x + gamepad1.right_stick_x;
-        BRPower = -gamepad1.left_stick_y + gamepad1.left_stick_x - gamepad1.right_stick_x;
+        flPower = -gamepad1.left_stick_y + gamepad1.left_stick_x + gamepad1.right_stick_x;
+        flPower = -gamepad1.left_stick_y - gamepad1.left_stick_x - gamepad1.right_stick_x;
+        blPower = -gamepad1.left_stick_y - gamepad1.left_stick_x + gamepad1.right_stick_x;
+        brPower = -gamepad1.left_stick_y + gamepad1.left_stick_x - gamepad1.right_stick_x;
 
-        double max = findMax(FLPower, FRPower, BLPower, BRPower);
+        double max = findMax(flPower, frPower, blPower, brPower);
         if (max != 0) {
-            FLPower /= max;
-            FRPower /= max;
-            BLPower /= max;
-            BRPower /= max;
+            flPower /= max;
+            frPower /= max;
+            blPower /= max;
+            brPower /= max;
+        }
+        //(y, a) (x,a)
+        //y is for linear slide up
+        if(gamepad2.y){
+            linearSlidePower = 1;
+        }
+        if(gamepad2.a){
+            linearSlidePower = -1;
+        }
+        if(gamepad2.x){
+            intakePower = 1;
+        }
+        if(gamepad2.b){
+            intakePower = -1;
+        }
+        if(gamepad2.dpad_up){
+            carouselPower = 1;
+        }
+        if(gamepad2.dpad_down){
+            carouselPower = -1;
+        }
+        if(gamepad2.dpad_left){
+            fourthPower = 1;
+        }
+        if(gamepad2.dpad_right){
+            fourthPower = -1;
         }
 
-        //FL
-//        if ((-gamepad1.left_stick_y + gamepad1.left_stick_x + gamepad1.right_stick_x) > 1) {
-//            double max = findMax(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
-//            FLPower = (-gamepad1.left_stick_y / max) + (gamepad1.left_stick_x / max) + (gamepad1.right_stick_x / max);
-//        } else {
-//            FLPower = -gamepad1.left_stick_y + gamepad1.left_stick_x + gamepad1.right_stick_x;
-//        }
-//        //FR
-//        if ((-gamepad1.left_stick_y - gamepad1.left_stick_x - gamepad1.right_stick_x) > 1) {
-//            double max = findMax(-gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x);
-//            FRPower = (-gamepad1.left_stick_y / max) - (gamepad1.left_stick_x / max) - (gamepad1.right_stick_x / max);
-//        } else {
-//            FRPower = -gamepad1.left_stick_y - gamepad1.left_stick_x - gamepad1.right_stick_x;
-//        }
-//        //BL
-//        if ((-gamepad1.left_stick_y - gamepad1.left_stick_x + gamepad1.right_stick_x) > 1) {
-//            double max = findMax(-gamepad1.left_stick_y, -gamepad1.left_stick_x, gamepad1.right_stick_x);
-//            BLPower = ((-gamepad1.left_stick_y / max) - (gamepad1.left_stick_x / max) + (gamepad1.right_stick_x / max));
-//        } else {
-//            BLPower = -gamepad1.left_stick_y - gamepad1.left_stick_x + gamepad1.right_stick_x;
-//        }
-//        //BR
-//        if ((-gamepad1.left_stick_y + gamepad1.left_stick_x - gamepad1.right_stick_x) > 1) {
-//            double max = findMax(-gamepad1.left_stick_y, gamepad1.left_stick_x, -gamepad1.right_stick_x);
-//            BRPower = ((-gamepad1.left_stick_y / max) + (gamepad1.left_stick_x / max) - (gamepad1.right_stick_x / max));
-//        } else {
-//            BRPower = -gamepad1.left_stick_y + gamepad1.left_stick_x - gamepad1.right_stick_x;
-//        }
-
-        FLDrive.setPower(FLPower);
-        FRDrive.setPower(FRPower);
-        BLDrive.setPower(BLPower);
-        BRDrive.setPower(BRPower);
+        flDrive.setPower(flPower);
+        frDrive.setPower(frPower);
+        blrive.setPower(blPower);
+        brDrive.setPower(brPower);
+        linearSlideDrive.setPower(linearSlidePower);
+        intakeDrive.setPower(intakePower);
+        carouselDrive.setPower(carouselPower);
+        fourth.setPower(fourthPower);
 
 
         telemetry.addData("Status", "Run Time: " + runtime.toString());
@@ -132,6 +153,14 @@ public class Teleop extends OpMode
      */
     @Override
     public void stop() {
+        flPower = 0;
+        frPower = 0;
+        blPower = 0;
+        brPower = 0;
+        linearSlidePower = 0;
+        intakePower = 0;
+        carouselPower = 0;
+        fourthPower = 0;
     }
 
     public double findMax(double num1, double num2, double num3, double num4) {
