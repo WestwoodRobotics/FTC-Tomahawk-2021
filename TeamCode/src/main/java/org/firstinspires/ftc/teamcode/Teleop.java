@@ -1,4 +1,6 @@
-package org.firstinspires.ftc.robotcontroller.external.samples;
+package org.firstinspires.ftc.teamcode;
+
+import static java.lang.Math.abs;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -48,11 +50,11 @@ public class Teleop extends OpMode
         frDrive.setDirection(DcMotor.Direction.REVERSE);
         blDrive.setDirection(DcMotor.Direction.FORWARD);
         brDrive.setDirection(DcMotor.Direction.REVERSE);
-        linearSlideDrive.setDirection(Dcmotor.Direction.FOWARD);
-        intakeDrive.setDirection(Dcmotor.Direction.FORWARD);
-        carouselDrive.setDirection(Dcmotor.Direction.FORWARD);
-        fourth.setDirection(Dcmotor.Direction.FORWARD);
-        fifth.setDirection(Dcmotor.Direction.FORWARD);
+        linearSlideDrive.setDirection(DcMotor.Direction.FORWARD);
+        intakeDrive.setDirection(DcMotor.Direction.FORWARD);
+        carouselDrive.setDirection(DcMotor.Direction.FORWARD);
+        fourth.setDirection(DcMotor.Direction.FORWARD);
+        fifth.setDirection(DcMotor.Direction.FORWARD);
 
         //setting zero power behavior to brake instead of float.
         //brake means that moving the wheel is met with active resistance
@@ -88,14 +90,14 @@ public class Teleop extends OpMode
      */
     @Override
     public void loop() {
-        double flPower;
-        double frPower;
-        double blPower;
-        double brPower;
-        double linearSlidePower;
-        double intakePower;
-        double carouselPower;
-        double fourthPower;
+        double flPower = 0;
+        double frPower = 0;
+        double blPower = 0;
+        double brPower = 0;
+        double linearSlidePower = 0;
+        double intakePower = 0;
+        double carouselPower = 0;
+        double fourthPower = 0;
 
         flPower = -gamepad1.left_stick_y + gamepad1.left_stick_x + gamepad1.right_stick_x;
         flPower = -gamepad1.left_stick_y - gamepad1.left_stick_x - gamepad1.right_stick_x;
@@ -138,7 +140,7 @@ public class Teleop extends OpMode
 
         flDrive.setPower(flPower);
         frDrive.setPower(frPower);
-        blrive.setPower(blPower);
+        blDrive.setPower(blPower);
         brDrive.setPower(brPower);
         linearSlideDrive.setPower(linearSlidePower);
         intakeDrive.setPower(intakePower);
@@ -147,7 +149,7 @@ public class Teleop extends OpMode
 
 
         telemetry.addData("Status", "Run Time: " + runtime.toString());
-        telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
+
     }
 
     /*
@@ -155,14 +157,15 @@ public class Teleop extends OpMode
      */
     @Override
     public void stop() {
-        flPower = 0;
-        frPower = 0;
-        blPower = 0;
-        brPower = 0;
-        linearSlidePower = 0;
-        intakePower = 0;
-        carouselPower = 0;
-        fourthPower = 0;
+        flDrive.setPower(0);
+        frDrive.setPower(0);
+        blDrive.setPower(0);
+        brDrive.setPower(0);
+        linearSlideDrive.setPower(0);
+        intakeDrive.setPower(0);
+        carouselDrive.setPower(0);
+        fourth.setPower(0);
+
     }
 
     public double findMax(double num1, double num2, double num3, double num4) {
