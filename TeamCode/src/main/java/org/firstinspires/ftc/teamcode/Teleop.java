@@ -12,61 +12,17 @@ import java.util.*;
 
 @TeleOp(name="Basic: Iterative OpMode", group="Iterative Opmode")
 @Disabled
-public class Teleop extends OpMode
-{
+public class Teleop extends OpMode {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
+    private Hardware2 robot;
+    Boolean isRunning = false;
+    Boolean isoff = true;
 
-    private DcMotor flDrive = null;
-    private DcMotor frDrive = null;
-    private DcMotor blDrive = null;
-    private DcMotor brDrive = null;
-    private DcMotor linearSlideDrive = null;
-    private DcMotor intakeDrive = null;
-    private DcMotor carouselDrive = null;
-    private DcMotor fourth = null;
-    private DcMotor fifth = null;
     @Override
     public void init() {
         telemetry.addData("Status", "Initialized");
-
-        // Initialize the hardware variables. Note that the strings used here as parameters
-        // to 'get' must correspond to the names assigned during the robot configuration
-        // step (using the FTC Robot Controller app on the phone).
-        flDrive = hardwareMap.get(DcMotor.class, "front_left_drive");
-        frDrive = hardwareMap.get(DcMotor.class, "front_right_drive");
-        blDrive = hardwareMap.get(DcMotor.class, "back_left_drive");
-        brDrive = hardwareMap.get(DcMotor.class, "back_right_drive");
-        linearSlideDrive = hardwareMap.get(DcMotor.class, "extra_motor_1");
-        intakeDrive = hardwareMap.get(DcMotor.class, "extra_motor_2");
-        carouselDrive = hardwareMap.get(DcMotor.class, "extra_motor_3");
-        fourth = hardwareMap.get(DcMotor.class, "extra_motor_4");
-        fifth = hardwareMap.get(DcMotor.class, "extra_motor_5");
-        // Most robots need the motor on one side to be reversed to drive forward
-        // Reverse the motor that runs backwards when connected directly to the battery
-
-        //setting direction
-        flDrive.setDirection(DcMotor.Direction.FORWARD);
-        frDrive.setDirection(DcMotor.Direction.REVERSE);
-        blDrive.setDirection(DcMotor.Direction.FORWARD);
-        brDrive.setDirection(DcMotor.Direction.REVERSE);
-        linearSlideDrive.setDirection(DcMotor.Direction.FORWARD);
-        intakeDrive.setDirection(DcMotor.Direction.FORWARD);
-        carouselDrive.setDirection(DcMotor.Direction.FORWARD);
-        fourth.setDirection(DcMotor.Direction.FORWARD);
-        fifth.setDirection(DcMotor.Direction.FORWARD);
-
-        //setting zero power behavior to brake instead of float.
-        //brake means that moving the wheel is met with active resistance
-        flDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        frDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        blDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        frDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        linearSlideDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        intakeDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        carouselDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        fourth.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        //float means the wheel will be able to be pushed
+        robot = new Hardware2(hardwareMap);
 
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
@@ -113,39 +69,51 @@ public class Teleop extends OpMode
         }
         //(y, a) (x,a)
         //y is for linear slide up
-        if(gamepad2.y){
+        if (gamepad2.y) {
             linearSlidePower = 1;
         }
-        if(gamepad2.a){
+        if (gamepad2.a) {
             linearSlidePower = -1;
         }
-        if(gamepad2.x){
+        if (gamepad2.x) {
             intakePower = 1;
         }
-        if(gamepad2.b){
+        if (gamepad2.b) {
             intakePower = -1;
         }
-        if(gamepad2.dpad_up){
+        if (gamepad2.dpad_up) {
             carouselPower = 1;
         }
-        if(gamepad2.dpad_down){
+        if (gamepad2.dpad_down) {
             carouselPower = -1;
         }
-        if(gamepad2.dpad_left){
+        if (gamepad2.dpad_left) {
             fourthPower = 1;
         }
-        if(gamepad2.dpad_right){
+        if (gamepad2.dpad_right) {
             fourthPower = -1;
         }
+        if (gamepad2.a && !isRunning) {
+            intakePower = 1;
+            isRunning = true;
+        } else if (isRunning && !gamepad2.dpad_up) {
+            isoff = true;
+        }
+        if (gamepad2.a && !isoff) {
+            isoff = true;
+            isRunning = false;
+            intakePower = 0;
+        }
 
-        flDrive.setPower(flPower);
-        frDrive.setPower(frPower);
-        blDrive.setPower(blPower);
-        brDrive.setPower(brPower);
-        linearSlideDrive.setPower(linearSlidePower);
-        intakeDrive.setPower(intakePower);
-        carouselDrive.setPower(carouselPower);
-        fourth.setPower(fourthPower);
+
+        robot.flDrive.setPower(flPower);
+        robot.frDrive.setPower(frPower);
+        robot.blDrive.setPower(blPower);
+        robot.brDrive.setPower(brPower);
+        robot.linearSlideDrive.setPower(linearSlidePower);
+        robot.intakeDrive.setPower(intakePower);
+        robot.carouselDrive.setPower(carouselPower);
+        robot.fourth.setPower(fourthPower);
 
 
         telemetry.addData("Status", "Run Time: " + runtime.toString());
@@ -157,14 +125,14 @@ public class Teleop extends OpMode
      */
     @Override
     public void stop() {
-        flDrive.setPower(0);
-        frDrive.setPower(0);
-        blDrive.setPower(0);
-        brDrive.setPower(0);
-        linearSlideDrive.setPower(0);
-        intakeDrive.setPower(0);
-        carouselDrive.setPower(0);
-        fourth.setPower(0);
+        robot.flDrive.setPower(0);
+        robot.frDrive.setPower(0);
+        robot.blDrive.setPower(0);
+        robot.brDrive.setPower(0);
+        robot.linearSlideDrive.setPower(0);
+        robot.intakeDrive.setPower(0);
+        robot.carouselDrive.setPower(0);
+        robot.fourth.setPower(0);
 
     }
 
@@ -179,5 +147,6 @@ public class Teleop extends OpMode
         }
         return max;
     }
+
 
 }

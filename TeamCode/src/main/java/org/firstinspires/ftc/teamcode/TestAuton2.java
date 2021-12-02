@@ -19,16 +19,21 @@ group="linear Opmode")
 public class TestAuton2 extends LinearOpMode {
     //declare Opmode members.
     private ElapsedTime runtime = new ElapsedTime();
-    private Hardware2 hardware = new Hardware2(hardwareMap);
+    private Hardware2 robot;
 
     @Override
     public void runOpMode(){
         telemetry.addData("Status", "Initiallized");
         telemetry.update();
-
+        robot = new Hardware2(hardwareMap);
         waitForStart();
         runtime.reset();
-        while (opModeIsActive()){
+        while (opModeIsActive()) {
+            moveForward(200);
+            if(runtime.seconds() > 7){
+                turnCarousel(100);
+            }
+
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.update();
 
