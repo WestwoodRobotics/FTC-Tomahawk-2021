@@ -11,35 +11,37 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-public class AutonMethods() {
+public class AutonMethods{
 
-    public void turnCarousel(int ticks) {
-        Hardware2.carouselDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        Hardware2.carouselDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    public void turnCarousel(Hardware2 robot, int ticks) {
+        robot.carouselDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.carouselDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        while (Hardware2.carouselDrive.getCurrentPosition() < ticks) {
+        while (robot.carouselDrive.getCurrentPosition() < ticks) {
 
             //figure out which way reverse or not reverse to turn the carousel, only needs one rotation in the right direction
-            Hardware2.carouselDrive.setPower(1);
+            robot.carouselDrive.setPower(1);
         }
 
     }
-    public void moveForward(int ticks) {
-        flDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        frDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        blDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        brDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        flDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        frDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        blDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        brDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        while (flDrive.getCurrentPosition() < ticks) {
-            flDrive.setPower(.5);
-            frDrive.setPower(-.5);
-            blDrive.setPower(.5);
-            brDrive.setPower(-.5);
+    public void moveForward(Hardware2 robot, int ticks) {
+        robot.flDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.frDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.blDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.brDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.flDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.frDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.blDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.brDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        while (robot.flDrive.getCurrentPosition() < ticks) {
+            robot.flDrive.setPower(.5);
+            robot.frDrive.setPower(-.5);
+            robot.blDrive.setPower(.5);
+            robot.brDrive.setPower(-.5);
         }
+    }
 }
 //public class AutonMethods {
    // public static void MoveForward(int inches){

@@ -1,6 +1,7 @@
-package org.firstinspires.ftc.robotcontroller.external.samples;
+package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -9,7 +10,7 @@ import com.qualcomm.robotcore.util.Range;
 
 @Autonomous(name="Forward Auton", group="Linear Opmode")
 //@Disabled
-public class BasicOpMode_Linear extends LinearOpMode {
+public class ForwardAuton extends LinearOpMode {
   private ElapsedTime runtime = new ElapsedTime();
   //private DcMotor leftDrive = null;
   //private DcMotor rightDrive = null;
