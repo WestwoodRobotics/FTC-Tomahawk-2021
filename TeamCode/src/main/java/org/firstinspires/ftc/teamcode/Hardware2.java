@@ -25,7 +25,7 @@ public class Hardware2 {
     public DcMotor fourth = null;
     public DcMotor fifth = null;
     public HardwareMap hardwareMap;
-
+    public ElapsedTime runtime = new ElapsedTime();
     public Hardware2(HardwareMap hardwareMap) {
         this.hardwareMap = hardwareMap;
         // Initialize the hardware variables. Note that the strings used here as parameters

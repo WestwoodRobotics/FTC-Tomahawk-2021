@@ -11,35 +11,30 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+//28 ticks in a rotation
 public class AutonMethods{
-
-    public void turnCarousel(Hardware2 robot, int ticks) {
+    public int ticksToRotation(int ticks){
+        return ticks /= 28;
+    }
+    public void turnCarousel(Hardware2 robot, int seconds) {
         robot.carouselDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.carouselDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        double startTime = robot.runtime.seconds();
 
-        while (robot.carouselDrive.getCurrentPosition() < ticks) {
-
+        while ((robot.runtime.seconds() - startTime) < seconds) {
             //figure out which way reverse or not reverse to turn the carousel, only needs one rotation in the right direction
-            robot.carouselDrive.setPower(1);
+            robot.carouselDrive.setPower(.75);
         }
 
     }
 
     public void moveForward(Hardware2 robot, int ticks) {
-        robot.flDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.frDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.blDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.brDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.flDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.frDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.blDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.brDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        while (robot.flDrive.getCurrentPosition() < ticks) {
-            robot.flDrive.setPower(.5);
-            robot.frDrive.setPower(-.5);
-            robot.blDrive.setPower(.5);
-            robot.brDrive.setPower(-.5);
+        int startPos = robot.flDrive.getCurrentPosition();
+        while ((robot.flDrive.getCurrentPosition() - startPos) < ticks) {
+            robot.flDrive.setPower(.2);
+            robot.frDrive.setPower(.2);
+            robot.blDrive.setPower(.2);
+            robot.brDrive.setPower(.2);
         }
     }
 }

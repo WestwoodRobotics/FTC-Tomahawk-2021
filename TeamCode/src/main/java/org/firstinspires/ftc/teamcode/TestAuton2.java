@@ -30,7 +30,9 @@ public class TestAuton2 extends LinearOpMode {
         waitForStart();
         runtime.reset();
         while (opModeIsActive()) {
-            autonMethods.moveForward(robot, 200);
+            if(runtime.seconds() < 4) {
+                autonMethods.moveForward(robot, 200);
+            }
             if (runtime.seconds() > 7) {
                 autonMethods.turnCarousel(robot, 100);
             }
