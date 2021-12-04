@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import java.util.*;
 //teleOp
-@Autonomous(name = "Basic: Linear Opmode",
+@Autonomous(name = "Redside carousel",
 group="linear Opmode")
 //@Disabled
 public class TestAuton2 extends LinearOpMode {
@@ -31,10 +31,10 @@ public class TestAuton2 extends LinearOpMode {
         runtime.reset();
         while (opModeIsActive()) {
             if(runtime.seconds() < 4) {
-                autonMethods.moveForward(robot, 200);
+                autonMethods.moveForward(100);
             }
-            if (runtime.seconds() > 7) {
-                autonMethods.turnCarousel(robot, 100);
+            if (runtime.seconds() > 8) {
+                autonMethods.turnCarousel(9);
             }
         }
             telemetry.addData("Status", "Run Time: " + runtime.toString());

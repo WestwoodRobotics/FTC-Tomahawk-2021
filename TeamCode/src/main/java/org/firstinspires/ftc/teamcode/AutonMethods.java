@@ -13,10 +13,16 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 //28 ticks in a rotation
 public class AutonMethods{
-    public int ticksToRotation(int ticks){
+    /*public int ticksToRotation(int ticks){
+
         return ticks /= 28;
     }
-    public void turnCarousel(Hardware2 robot, int seconds) {
+
+     */
+
+    private Hardware2 robot;
+
+    public void turnCarousel(int seconds) {
         robot.carouselDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.carouselDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         double startTime = robot.runtime.seconds();
@@ -28,7 +34,16 @@ public class AutonMethods{
 
     }
 
-    public void moveForward(Hardware2 robot, int ticks) {
+//    public void moveForward(Hardware2 robot, int ticks) {
+//        int startPos = robot.flDrive.getCurrentPosition();
+//        while ((robot.flDrive.getCurrentPosition() - startPos) < ticks) {
+//            robot.flDrive.setPower(.2);
+//            robot.frDrive.setPower(.2);
+//            robot.blDrive.setPower(.2);
+//            robot.brDrive.setPower(.2);
+//        }
+//    }
+    public void moveForward(int ticks) {
         int startPos = robot.flDrive.getCurrentPosition();
         while ((robot.flDrive.getCurrentPosition() - startPos) < ticks) {
             robot.flDrive.setPower(.2);
