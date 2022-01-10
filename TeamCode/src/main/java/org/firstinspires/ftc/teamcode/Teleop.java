@@ -1,15 +1,16 @@
-package org.firstinspires.ftc.robotcontroller.external.samples;
+package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 import java.util.*;
 
-@TeleOp(name="Basic: Iterative OpMode", group="Iterative Opmode")
-@Disabled
+
+@TeleOp(name="Tomahawk")
 public class Teleop extends OpMode
 {
     // Declare OpMode members.
@@ -19,6 +20,9 @@ public class Teleop extends OpMode
     private DcMotor FRDrive = null;
     private DcMotor BLDrive = null;
     private DcMotor BRDrive = null;
+    private DcMotor XBDrive = null;
+    private DcMotor YADrive = null;
+
 
     /*
      * Code to run ONCE when the driver hits INIT
@@ -34,15 +38,19 @@ public class Teleop extends OpMode
         FRDrive = hardwareMap.get(DcMotor.class, "front_right_drive");
         BLDrive = hardwareMap.get(DcMotor.class, "back_left_drive");
         BRDrive = hardwareMap.get(DcMotor.class, "back_right_drive");
+        XBDrive = hardwareMap.get(DcMotor.class, "x_button_drive");
+        YADrive = hardwareMap.get(DcMotor.class, "b_button_drive");
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
 
-        //lol
+        //lol XD
         FLDrive.setDirection(DcMotor.Direction.FORWARD);
-        FRDrive.setDirection(DcMotor.Direction.FORWARD);
+        FRDrive.setDirection(DcMotor.Direction.REVERSE);
         BLDrive.setDirection(DcMotor.Direction.FORWARD);
-        BRDrive.setDirection(DcMotor.Direction.FORWARD);
+        BRDrive.setDirection(DcMotor.Direction.REVERSE);
+        XBDrive.setDirection(DcMotor.Direction.FORWARD);
+        YADrive.setDirection(DcMotor.Direction.FORWARD);
 
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
@@ -74,19 +82,43 @@ public class Teleop extends OpMode
         double BLPower;
         double BRPower;
 
+        double XBPower = 0.5;
+        double YAPower = 0.5;
+
         //Power adjusting
-        FLPower = -gamepad1.left_stick_y + gamepad1.left_stick_x + gamepad1.right_stick_x;
-        FRPower = -gamepad1.left_stick_y - gamepad1.left_stick_x - gamepad1.right_stick_x;
-        BLPower = -gamepad1.left_stick_y - gamepad1.left_stick_x + gamepad1.right_stick_x;
-        BRPower = -gamepad1.left_stick_y + gamepad1.left_stick_x - gamepad1.right_stick_x;
+        FLPower = (-gamepad1.left_stick_y + gamepad1.left_stick_x + gamepad1.right_stick_x) / 2;
+        FRPower = (-gamepad1.left_stick_y - gamepad1.left_stick_x - gamepad1.right_stick_x) / 2;
+        BLPower = (-gamepad1.left_stick_y - gamepad1.left_stick_x + gamepad1.right_stick_x) / 2;
+        BRPower = (-gamepad1.left_stick_y + gamepad1.left_stick_x - gamepad1.right_stick_x) / 2;
+
+
+
+        if (gamepad1.x && gamepad1.b) {
+            XBPower = 0;
+        } else if (!gamepad1.x && !gamepad1.b) {
+            XBPower = 0;
+        } else if (gamepad1.x && !gamepad1.b) {
+            XBPower = 1;
+        } else if (!gamepad1.x && gamepad1.b) {
+            XBPower = -1;
+        }
+
+        //else if (gamepad2.y) {
+//            YAPower = 1;
+//        } else if (gamepad2.a) {
+//            YAPower = -1;
+//        }
 
         double max = findMax(FLPower, FRPower, BLPower, BRPower);
+
         if (max != 0) {
-            FLPower /= max;
+            FLPower /=max;
             FRPower /= max;
             BLPower /= max;
             BRPower /= max;
         }
+
+
 
         //FL
 //        if ((-gamepad1.left_stick_y + gamepad1.left_stick_x + gamepad1.right_stick_x) > 1) {
@@ -117,17 +149,19 @@ public class Teleop extends OpMode
 //            BRPower = -gamepad1.left_stick_y + gamepad1.left_stick_x - gamepad1.right_stick_x;
 //        }
 
-        FLDrive.setPower(FLPower);
-        FRDrive.setPower(FRPower);
-        BLDrive.setPower(BLPower);
-        BRDrive.setPower(BRPower);
+        FLDrive.setPower(FLPower * 0.65);
+        FRDrive.setPower(FRPower * 0.65);
+        BLDrive.setPower(BLPower * 0.65);
+        BRDrive.setPower(BRPower * 0.65);
 
+        XBDrive.setPower(XBPower * 0.75);
+        YADrive.setPower(YAPower * 0.75);
 
         telemetry.addData("Status", "Run Time: " + runtime.toString());
-        telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
+        telemetry.addData("Motors", "carousel (%.2f)", XBPower);
     }
 
-    /*
+    /*1
      * Code to run ONCE after the driver hits STOP
      */
     @Override
@@ -135,7 +169,7 @@ public class Teleop extends OpMode
     }
 
     public double findMax(double num1, double num2, double num3, double num4) {
-        double[] nums = {abs(num1), abs(num2), abs(num3), abs(num4)};
+        double[] nums = {Math.abs(num1), Math.abs(num2), Math.abs(num3), Math.abs(num4)};
 
         double max = -0.1;
         for (double num : nums) {

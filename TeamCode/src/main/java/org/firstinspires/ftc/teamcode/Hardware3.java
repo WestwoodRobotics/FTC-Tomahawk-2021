@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.util.Range;
 import java.util.*;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-public class Hardware {
+public class Hardware3 {
     static DcMotor FLMotor;
     static DcMotor FRMotor;
     static DcMotor BLMotor;
@@ -18,7 +18,7 @@ public class Hardware {
     static DcMotor CarouselMotor;
     static HardwareMap hardwareMap;
 
-    public Hardware(HardwareMap hardwaremap) {
+    public Hardware3(HardwareMap hardwaremap) {
         hardwareMap = hardwaremap;
     }
     public static void HardwareInit() {
@@ -33,5 +33,19 @@ public class Hardware {
         BLMotor.setDirection(DcMotor.Direction.FORWARD);
         BRMotor.setDirection(DcMotor.Direction.REVERSE);
         CarouselMotor.setDirection(DcMotor.Direction.FORWARD);
+
+        FLMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        FRMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        BLMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        BRMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        CarouselMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        FLMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        FRMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        BLMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        BRMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        CarouselMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+
     }
 }
