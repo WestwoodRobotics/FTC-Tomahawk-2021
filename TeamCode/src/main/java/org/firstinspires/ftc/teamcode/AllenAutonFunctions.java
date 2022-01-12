@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class AllenAutonFunctions {
     static final int TICKSPERINCH = 360;
     static final int TICKSPERCAROUSELINCH = 999;
+    static final int TICKSPERDEGREE = 50;
 
     public AllenAutonFunctions() {
         ;
@@ -56,6 +57,9 @@ public class AllenAutonFunctions {
             ;
         }
         setPowers(0,0,0,0,0);
+    }
+    public static void turnRight(int degrees) {
+
     }
     public static void carousel(int inches) {
         Hardware3.CarouselMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
