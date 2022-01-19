@@ -59,12 +59,34 @@ public class AllenAutonFunctions {
         setPowers(0,0,0,0,0);
     }
     public static void turnRight(int degrees) {
+        Hardware3.FLMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
+        Hardware3.FLMotor.setTargetPosition(degrees * TICKSPERDEGREE);
+        Hardware3.FLMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        setPowers(1,-1,1,-1,0);
+        while (Hardware3.FLMotor.isBusy()) {
+            ;
+        }
+        setPowers(0,0,0,0,0);
+    }
+
+    public static void turnLeft(int degrees) {
+        Hardware3.FLMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        Hardware3.FLMotor.setTargetPosition(degrees * TICKSPERDEGREE);
+        Hardware3.FLMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        setPowers(-1,1,-1,1,0);
+        while (Hardware3.FLMotor.isBusy()) {
+            ;
+        }
+        setPowers(0,0,0,0,0);
     }
     public static void carousel(int inches) {
         Hardware3.CarouselMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        Hardware3.CarouselMotor.setTargetPosition(inches * TICKSPERINCH);
+        Hardware3.CarouselMotor.setTargetPosition(inches * TICKSPERCAROUSELINCH);
         Hardware3.CarouselMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         setPowers(0,0,0,0,1);
