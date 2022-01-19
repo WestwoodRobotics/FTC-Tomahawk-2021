@@ -19,6 +19,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 //28 ticks in a rotation
 public class AutonMethods{
@@ -38,7 +40,7 @@ public class AutonMethods{
 
         while ((robot.runtime.seconds() - startTime) < seconds) {
             //figure out which way reverse or not reverse to turn the carousel, only needs one rotation in the right direction
-            robot.carouselDrive.setPower(.75);
+            robot.carouselDrive.setVelocity(.75);
         }
 
     }
@@ -46,23 +48,31 @@ public class AutonMethods{
 //    public void moveForward(Hardware2 robot, int ticks) {
 //        int startPos = robot.flDrive.getCurrentPosition();
 //        while ((robot.flDrive.getCurrentPosition() - startPos) < ticks) {
-//            robot.flDrive.setPower(.2);
-//            robot.frDrive.setPower(.2);
-//            robot.blDrive.setPower(.2);
-//            robot.brDrive.setPower(.2);
+//            robot.flDrive.setVelocity(.2);
+//            robot.frDrive.setVelocity(.2);
+//            robot.blDrive.setVelocity(.2);
+//            robot.brDrive.setVelocity(.2);
 //        }
 //    }
     public void moveForward(int ticks) {
         int startPos = robot.flDrive.getCurrentPosition();
         while ((robot.flDrive.getCurrentPosition() - startPos) < ticks) {
-            robot.flDrive.setPower(.2);
-            robot.frDrive.setPower(.2);
-            robot.blDrive.setPower(.2);
-            robot.brDrive.setPower(.2);
+            robot.flDrive.setVelocity(.2);
+            robot.frDrive.setVelocity(.2);
+            robot.blDrive.setVelocity(.2);
+            robot.brDrive.setVelocity(.2);
         }
+    }
+
+    public void moveBackward(int ticks) {
+
     }
 }
 //public class AutonMethods {
    // public static void MoveForward(int inches){
+<<<<<<< HEAD
        // Hardware2.blDrive.setPower(
 >>>>>>> 1bbde928885c8c7f3e3113f49b11f4e82974a4e1
+=======
+       // Hardware2.blDrive.setVelocity(
+>>>>>>> 16bff98db54803635f3e545d051a5649e3261d5c
