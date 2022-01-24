@@ -20,8 +20,7 @@ public class TestAuton2 extends LinearOpMode {
     //declare Opmode members.
     private ElapsedTime runtime = new ElapsedTime();
     private Hardware2 robot;
-    //private AutonMethods autonMethods = new AutonMethods();
-    private AllenAutonFunctions allenMethods = new AllenAutonFunctions();
+    private AutonMethods autonMethods = new AutonMethods();
 
     @Override
     public void runOpMode(){
@@ -31,40 +30,12 @@ public class TestAuton2 extends LinearOpMode {
         waitForStart();
         runtime.reset();
         while (opModeIsActive()) {
-            //blue upper quad
-            allenMethods.forward(24);
-            allenMethods.turnRight(180);
-            allenMethods.left(73);
-            allenMethods.forward(18);
-            allenMethods.carousel(24);
-            allenMethods.backward(18);
-
-
-
-            //blue lower quad
-            /*allenMethods.forward(24);
-            allenMethods.turnRight(180);
-            allenMethods.left(24);
-            allenMethods.forward(18);
-            allenMethods.carousel(24);
-            allenMethods.backward(18);*/
-
-            //red upper quad
-            /*allenMethods.forward(24);
-            allenMethods.turnRight(180);
-            allenMethods.right(73);
-            allenMethods.forward(18);
-            allenMethods.carousel(24);
-            allenMethods.backward(18);*/
-
-
-            //red lower quad
-            /*allenMethods.forward(24);
-            allenMethods.turnRight(180);
-            allenMethods.right(24);
-            allenMethods.forward(18);
-            allenMethods.carousel(24);
-            allenMethods.backward(18);*/
+            if(runtime.seconds() < 4) {
+                autonMethods.moveForward(100);
+            }
+            if (runtime.seconds() > 8) {
+                autonMethods.turnCarousel(9);
+            }
         }
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.update();
