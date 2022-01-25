@@ -13,21 +13,21 @@ import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import java.util.*;
 //teleOp
-@Autonomous(name = "Redside carousel",
+@Autonomous(name = "Auton ig",
         group="linear Opmode")
 //@Disabled
 public class TestAuton extends LinearOpMode {
     //declare Opmode members.
     private ElapsedTime runtime = new ElapsedTime();
-    private Hardware2 robot;
+    private Hardware3 robot;
     //private AutonMethods autonMethods = new AutonMethods();
     private AllenAutonFunctions allenMethods = new AllenAutonFunctions();
 
     @Override
     public void runOpMode(){
-        telemetry.addData("Status", "Initiallized");
+        telemetry.addData("Status", "Initialized");
         telemetry.update();
-        robot = new Hardware2(hardwareMap);
+        robot = new Hardware3(hardwareMap);
         waitForStart();
         runtime.reset();
         while (opModeIsActive()) {
@@ -42,29 +42,35 @@ public class TestAuton extends LinearOpMode {
 
 
             //blue lower quad
-            /*allenMethods.forward(24);
+            /*
+            allenMethods.forward(24);
             allenMethods.turnRight(180);
             allenMethods.left(24);
             allenMethods.forward(18);
             allenMethods.carousel(24);
-            allenMethods.backward(18);*/
+            allenMethods.backward(18);
+            */
 
             //red upper quad
-            /*allenMethods.forward(24);
+            /*
+            allenMethods.forward(24);
             allenMethods.turnRight(180);
             allenMethods.right(73);
             allenMethods.forward(18);
             allenMethods.carousel(24);
-            allenMethods.backward(18);*/
+            allenMethods.backward(18);
+            */
 
 
             //red lower quad
-            /*allenMethods.forward(24);
+            /*
+            allenMethods.forward(24);
             allenMethods.turnRight(180);
             allenMethods.right(24);
             allenMethods.forward(18);
             allenMethods.carousel(24);
-            allenMethods.backward(18);*/
+            allenMethods.backward(18);
+            */
         }
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         telemetry.update();
