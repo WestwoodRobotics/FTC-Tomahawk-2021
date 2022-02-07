@@ -12,24 +12,12 @@ public class AllenAutonFunctions {
         ;
     }
 
-    public static void forward(int inches) {
+    public static void right(int inches) {
         Hardware3.FLMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         Hardware3.FLMotor.setTargetPosition(inches * TICKSPERINCH);
         Hardware3.FLMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         setPowers(1,1,1,1,0);
-        while (Hardware3.FLMotor.isBusy()) {
-            ;
-        }
-        setPowers(0,0,0,0,0);
-    }
-    public static void backward(int inches) {
-        Hardware3.FLMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        Hardware3.FLMotor.setTargetPosition(inches * TICKSPERINCH);
-        Hardware3.FLMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        setPowers(-1,-1,-1,-1,0);
         while (Hardware3.FLMotor.isBusy()) {
             ;
         }
@@ -41,13 +29,25 @@ public class AllenAutonFunctions {
         Hardware3.FLMotor.setTargetPosition(inches * TICKSPERINCH);
         Hardware3.FLMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
+        setPowers(-1,-1,-1,-1,0);
+        while (Hardware3.FLMotor.isBusy()) {
+            ;
+        }
+        setPowers(0,0,0,0,0);
+    }
+    public static void forward(int inches) {
+        Hardware3.FLMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        Hardware3.FLMotor.setTargetPosition(inches * TICKSPERINCH);
+        Hardware3.FLMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
         setPowers(-1,1,1,-1,0);
         while (Hardware3.FLMotor.isBusy()) {
             ;
         }
         setPowers(0,0,0,0,0);
     }
-    public static void right(int inches) {
+    public static void backward(int inches) {
         Hardware3.FLMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         Hardware3.FLMotor.setTargetPosition(inches * TICKSPERINCH);
