@@ -3,6 +3,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
@@ -19,8 +20,11 @@ public class Teleop extends OpMode
     private DcMotor FRDrive = null;
     private DcMotor BLDrive = null;
     private DcMotor BRDrive = null;
-    private DcMotor XBDrive = null;
-    private DcMotor YADrive = null;
+    private DcMotor carouselDrive = null;
+    private DcMotor slideDrive = null;
+
+//    private Servo intake = null;
+//    private Servo intakeArm = null;
 
 
     /*
@@ -37,8 +41,11 @@ public class Teleop extends OpMode
         FRDrive = hardwareMap.get(DcMotor.class, "front_right_drive");
         BLDrive = hardwareMap.get(DcMotor.class, "back_left_drive");
         BRDrive = hardwareMap.get(DcMotor.class, "back_right_drive");
-        XBDrive = hardwareMap.get(DcMotor.class, "x_button_drive");
-        YADrive = hardwareMap.get(DcMotor.class, "y_button_drive");
+        carouselDrive = hardwareMap.get(DcMotor.class, "carousel_drive");
+        slideDrive = hardwareMap.get(DcMotor.class, "slide_drive");
+
+//        intake = hardwareMap.get(Servo.class, "intake_servo");
+//        intakeArm = hardwareMap.get(Servo.class, "intake_arm_servo");
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
@@ -48,8 +55,12 @@ public class Teleop extends OpMode
         FRDrive.setDirection(DcMotor.Direction.REVERSE);
         BLDrive.setDirection(DcMotor.Direction.FORWARD);
         BRDrive.setDirection(DcMotor.Direction.REVERSE);
-        XBDrive.setDirection(DcMotor.Direction.FORWARD);
-        YADrive.setDirection(DcMotor.Direction.FORWARD);
+        carouselDrive.setDirection(DcMotor.Direction.FORWARD);
+        slideDrive.setDirection(DcMotor.Direction.FORWARD);
+        slideDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+//        intake.setDirection(Servo.Direction.FORWARD);
+//        intakeArm.setDirection(Servo.Direction.FORWARD);
 
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
@@ -81,8 +92,10 @@ public class Teleop extends OpMode
         double BLPower;
         double BRPower;
 
-        double XBPower = 0.5;
-        double YAPower = 0.5;
+        double carouselPower = 0.5;
+        double slidePower = 0.0;
+        double intakePower = 0.0;
+        double intakeArmPower = 0.0;
 
         //Old Power adjusting
 //        FLPower = (-gamepad1.left_stick_y + gamepad1.left_stick_x + gamepad1.right_stick_x) / 2;
@@ -99,29 +112,56 @@ public class Teleop extends OpMode
 
 
         if (gamepad1.x && gamepad1.b) {
-            XBPower = 0.0;
+            carouselPower = 0.0;
         } else if (!gamepad1.x && !gamepad1.b) {
-            XBPower = 0.0;
+            carouselPower = 0.0;
         } else if (gamepad1.x && !gamepad1.b) {
-            XBPower = 1.0;
+            carouselPower = 1.0;
         } else if (!gamepad1.x && gamepad1.b) {
-            XBPower = -1.0;
+            carouselPower = -1.0;
         }
 
-        if (gamepad1.y && gamepad1.a) {
-            YAPower = 0.0;
+        if (gamepad1.y){
+            slidePower = 1.0;
+        } else if (gamepad1.a){
+            slidePower = -1.0;
+        } else {
+            slidePower = 0;
+        }
+
+        //Servo powers
+        if (gamepad1.dpad_up) {
+            intakeArmPower = 1;
+        } else if (gamepad1.dpad_down){
+            intakeArmPower = 0;
+        }else{
+            intakeArmPower = 0.5;
+        }
+
+        if(gamepad1.dpad_right){
+            intakePower = 1;
+
+        }else if (gamepad1.dpad_left){
+            intakePower = 0;
+        }else{
+            intakePower = 0.5;
+        }
+
+
+        /*if (gamepad1.y && gamepad1.a) {
+            slidePower = 0.0;
         } else if (!gamepad1.y && !gamepad1.a) {
-            YAPower = 0.0;
+            slidePower = 0.0;
         } else if (gamepad1.y && !gamepad1.a) {
-            YAPower = 1.0;
+            slidePower = 1.0;
         } else if (!gamepad1.y && gamepad1.a) {
-            YAPower = -1.0;
+            slidePower = -1.0;
         }
-
+*/
         //else if (gamepad2.y) {
-//            YAPower = 1;
+//            slidePower = 1;
 //        } else if (gamepad2.a) {
-//            YAPower = -1;
+//            slidePower = -1;
 //        }
 
         double max = findMax(FLPower, FRPower, BLPower, BRPower);
@@ -169,11 +209,15 @@ public class Teleop extends OpMode
         BLDrive.setPower(BLPower * 0.65);
         BRDrive.setPower(BRPower * 0.65);
 
-        XBDrive.setPower(XBPower);
-        YADrive.setPower(YAPower * 0.70);
+
+
+        carouselDrive.setPower(carouselPower);
+        slideDrive.setPower(slidePower*.5);
 
         telemetry.addData("Status", "Run Time: " + runtime.toString());
-        telemetry.addData("Motors", "carousel (%.2f)", XBPower);
+        telemetry.addData("Motors", "carousel (%.2f)", carouselPower);
+
+//        intake.setPosition(0.5);
     }
 
     /*1

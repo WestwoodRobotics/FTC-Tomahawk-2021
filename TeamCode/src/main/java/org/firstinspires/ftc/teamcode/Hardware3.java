@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -17,6 +18,10 @@ public class Hardware3 {
     static DcMotorEx BLMotor;
     static DcMotorEx BRMotor;
     static DcMotorEx CarouselMotor;
+
+    static Servo intake;
+    static Servo intakeArm;
+
     static HardwareMap hardwareMap;
 
     public Hardware3(HardwareMap hardwaremap) {
