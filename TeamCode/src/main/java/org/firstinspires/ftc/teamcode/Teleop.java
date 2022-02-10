@@ -51,12 +51,18 @@ public class Teleop extends OpMode
         // Reverse the motor that runs backwards when connected directly to the battery
 
         //lol XD
-        FLDrive.setDirection(DcMotor.Direction.REVERSE);
-        FRDrive.setDirection(DcMotor.Direction.FORWARD);
+        FLDrive.setDirection(DcMotor.Direction.FORWARD);
+        FRDrive.setDirection(DcMotor.Direction.REVERSE);
         BLDrive.setDirection(DcMotor.Direction.FORWARD);
         BRDrive.setDirection(DcMotor.Direction.REVERSE);
         carouselDrive.setDirection(DcMotor.Direction.FORWARD);
         slideDrive.setDirection(DcMotor.Direction.FORWARD);
+
+        FLDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        FRDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        BLDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        BRDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        carouselDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         slideDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
 //        intake.setDirection(Servo.Direction.FORWARD);
@@ -104,10 +110,18 @@ public class Teleop extends OpMode
 //        BRPower = (-gamepad1.left_stick_y + gamepad1.left_stick_x - gamepad1.right_stick_x) / 2;
 
         //Power adjusting
-        FLPower = (gamepad1.left_stick_y - gamepad1.left_stick_x - gamepad1.right_stick_x) / 2;
-        FRPower = (-gamepad1.left_stick_y - gamepad1.left_stick_x - gamepad1.right_stick_x) / 2;
-        BLPower = (-gamepad1.left_stick_y - gamepad1.left_stick_x + gamepad1.right_stick_x) / 2;
-        BRPower = (gamepad1.left_stick_y - gamepad1.left_stick_x + gamepad1.right_stick_x) / 2;
+        FLPower = (-gamepad1.left_stick_y - gamepad1.left_stick_x) / 2;
+        FRPower = (gamepad1.left_stick_y - gamepad1.left_stick_x) / 2;
+        BLPower = (gamepad1.left_stick_y - gamepad1.left_stick_x) / 2;
+        BRPower = (-gamepad1.left_stick_y - gamepad1.left_stick_x) / 2;
+
+        //turning is possible only when the left stick (used for strafing) is at 0
+        if (gamepad1.left_stick_y == 0 && gamepad1.left_stick_x == 0 && gamepad1.right_stick_x != 1) {
+            FLPower = gamepad1.right_stick_x;
+            FRPower = -gamepad1.right_stick_x;
+            BLPower = gamepad1.right_stick_x;
+            BRPower = -gamepad1.right_stick_x;
+        }
 
 
 
@@ -204,15 +218,15 @@ public class Teleop extends OpMode
 //            BRPower = -gamepad1.left_stick_y + gamepad1.left_stick_x - gamepad1.right_stick_x;
 //        }
 
-        FLDrive.setPower(FLPower * 0.65);
-        FRDrive.setPower(FRPower * 0.65);
-        BLDrive.setPower(BLPower * 0.65);
-        BRDrive.setPower(BRPower * 0.65);
+        FLDrive.setPower(FLPower * 0.5);
+        FRDrive.setPower(FRPower * 0.5);
+        BLDrive.setPower(BLPower * 0.5);
+        BRDrive.setPower(BRPower * 0.5);
 
 
 
         carouselDrive.setPower(carouselPower);
-        slideDrive.setPower(slidePower*.5);
+        slideDrive.setPower(slidePower*.2);
 
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         telemetry.addData("Motors", "carousel (%.2f)", carouselPower);
