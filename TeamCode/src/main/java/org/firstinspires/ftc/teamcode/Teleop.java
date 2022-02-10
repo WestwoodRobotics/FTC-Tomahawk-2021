@@ -51,8 +51,8 @@ public class Teleop extends OpMode
         // Reverse the motor that runs backwards when connected directly to the battery
 
         //lol XD
-        FLDrive.setDirection(DcMotor.Direction.FORWARD);
-        FRDrive.setDirection(DcMotor.Direction.REVERSE);
+        FLDrive.setDirection(DcMotor.Direction.REVERSE);
+        FRDrive.setDirection(DcMotor.Direction.FORWARD);
         BLDrive.setDirection(DcMotor.Direction.FORWARD);
         BRDrive.setDirection(DcMotor.Direction.REVERSE);
         carouselDrive.setDirection(DcMotor.Direction.FORWARD);
@@ -104,10 +104,10 @@ public class Teleop extends OpMode
 //        BRPower = (-gamepad1.left_stick_y + gamepad1.left_stick_x - gamepad1.right_stick_x) / 2;
 
         //Power adjusting
-        FLPower = (-gamepad1.left_stick_y + gamepad1.left_stick_x + gamepad1.right_stick_x) / 2;
-        FRPower = (-gamepad1.left_stick_y + gamepad1.left_stick_x - gamepad1.right_stick_x) / 2;
-        BLPower = (-gamepad1.left_stick_y + gamepad1.left_stick_x + gamepad1.right_stick_x) / 2;
-        BRPower = (-gamepad1.left_stick_y + gamepad1.left_stick_x - gamepad1.right_stick_x) / 2;
+        FLPower = (gamepad1.left_stick_y - gamepad1.left_stick_x - gamepad1.right_stick_x) / 2;
+        FRPower = (-gamepad1.left_stick_y - gamepad1.left_stick_x - gamepad1.right_stick_x) / 2;
+        BLPower = (-gamepad1.left_stick_y - gamepad1.left_stick_x + gamepad1.right_stick_x) / 2;
+        BRPower = (gamepad1.left_stick_y - gamepad1.left_stick_x + gamepad1.right_stick_x) / 2;
 
 
 
